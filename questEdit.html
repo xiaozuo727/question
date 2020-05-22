@@ -21,10 +21,9 @@
         <p class="bold font35">大学生消费调查问卷</p>
         <p class="color-gray font25 pad-t-2">添加问卷说明</p>
     </div>
-    <ul class="">
-
+    <ul id="list">
         <!--item-->
-        <li class="bg-white mar-b-2">
+        <!--<li class="bg-white mar-b-2">
             <div class="pad-3 line-h-2">
                 <p>1.您的性别</p>
                 <ul>
@@ -58,44 +57,7 @@
                     <p class="pad-t-1">删除</p>
                 </li>
             </ul>
-        </li>
-
-
-        <li class="bg-white mar-b-2">
-            <div class="pad-3 line-h-2">
-                <p>1.您的性别</p>
-                <ul>
-                    <li>
-                        <input type="radio">男
-                    </li>
-                    <li>
-                        <input type="radio">女
-                    </li>
-                </ul>
-            </div>
-            <ul class="bg-gray-l color-gray center font2 pad-2 border-t-gray hidden ">
-                <li class="fl col-2">
-                    <i class="iconfont font4 ">&#xe639</i>
-                    <p class="pad-t-1">编辑</p>
-                </li>
-                <li class="fl col-2">
-                    <i class="iconfont font4">&#xe66e</i>
-                    <p class="pad-t-1">复制</p>
-                </li>
-                <li class="fl col-2">
-                    <i class="iconfont font4">&#xe633</i>
-                    <p class="pad-t-1">上移</p>
-                </li>
-                <li class="fl col-2">
-                    <i class="iconfont font4">&#xe631</i>
-                    <p class="pad-t-1">下移</p>
-                </li>
-                <li class="fl col-2">
-                    <i class="iconfont font4">&#xe667</i>
-                    <p class="pad-t-1">删除</p>
-                </li>
-            </ul>
-        </li>
+        </li>-->
     </ul>
 
     <div class="mar-5 bg-white pad-2 center border-dashed" onclick="quest_class_select()">
@@ -225,9 +187,54 @@
 
 </div>
 <script>
+    var datalist;
+    $(function () {
+        var data = {
+            pid: localStorage.pid
+        }
+        new AjaxRequest({
+            url: hostUrl + 'api/project/index',
+            data: data,
+            callback: function (res) {
+                if(res.status == 1){
+                    datalist = res.data;
+                    addlist(datalist,$("#list"));
+                }
+
+            }
+
+        })
+    });
+
+    $(document).on('click','#list >li', function () {
+        $("#list >li").children("#editbox").remove();
+        showEdit($(this));
+
+    });
+    
+    function addlist(data,parent) {
+        let list = '';
+        for (let i=0; i<data.length; i++){
+            list += '<li class="bg-white mar-b-2" ><div class="pad-3 line-h-2"><p>'+data[i].content.title+'</p><ul>';
+            for (let j=0; j<data[i].content.subject.length; j++){
+                list += '<li><input type="radio">'+data[i].content.subject[j].content+'</li>';
+            }
+            list += '</ul></div></li>';
+        }
+        parent.html(list);
+    }
+
+    function showEdit(parent) {
+        let content = '<ul id="editbox" class="bg-gray-l color-gray center font2 pad-2 border-t-gray hidden"><li class="fl col-2"><i class="iconfont font4 ">&#xe639</i><p class="pad-t-1">编辑</p></li><li class="fl col-2"><i class="iconfont font4">&#xe66e</i><p class="pad-t-1">复制</p></li><li class="fl col-2"><i class="iconfont font4">&#xe633</i><p class="pad-t-1">上移</p></li><li class="fl col-2"><i class="iconfont font4">&#xe631</i><p class="pad-t-1">下移</p></li><li class="fl col-2"><i class="iconfont font4">&#xe667</i><p class="pad-t-1">删除</p></li></ul>';
+        parent.append(content)
+
+    }
+    
+
     function quest_class_select() {
         $(".quest_class").animate({top: "1rem"})
     }
+    
 </script>
 </body>
 </html>

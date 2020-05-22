@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            font: 15px/2 '微软雅黑';
+            padding: 20px;
+
+        }
+        ul, li{
+            list-style: none;
+        }
+        h1, h3{
+            color: #333;
+        }
+        h1{
+            color: #1ea0fa;
+            text-align: center;
+            font-size: 24px;
+            padding-bottom: 20px;
+        }
+        h3{
+            font-size: 16px;
+        }
+        .color-blue{
+            color: #1ea0fa;
+            font-weight: bold;
+        }
+        input[type=radio]{
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+        #list >div{
+            padding-bottom: 20px;
+        }
+        p{
+            background: #1ea0fa;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<h1>2019年8月份创建全国文明城市 入户调查问卷</h1>
+
+<section>
+    <div style="padding-bottom: 20px">
+        <div>
+            区：<input id="area" type="text">
+        </div>
+        <div>
+            办事处：<input id="office" type="text">
+        </div>
+        <div>
+            社区：<input id="community" type="text">
+        </div>
+        <div>
+            地址：<input id="addr" type="text">
+        </div>
+        <div>
+            姓名：<input id="name" type="text">
+        </div>
+        <div>
+            手机号：<input id="mobile" type="text">
+        </div>
+    </div>
+    <div id="list">
+    <!--<div>
+        <h3>1.您了解社会主义核心价值观（富强、民主、文明、和谐；自由、平等、公正、法治；爱国、敬业、诚信、友善）吗？</h3>
+        <ul>
+            <li>
+                <input type="radio">A.非常了解
+            </li>
+            <li>
+                <input type="radio">B.了解
+
+            </li>
+            <li>
+                <input type="radio">C.比较了解
+
+            </li>
+            <li>
+                <input type="radio">D.不了解
+
+            </li>
+            <li>
+                <input type="radio">E.非常不了解
+
+            </li>
+        </ul>
+    </div>-->
+    </div>
+
+    <p onclick="tijiao()">提交</p>
+</section>
+<script>
+    var datalist;
+    var data = {
+        pid: 1111111,
+    }
+    $(function () {
+        $.ajax({
+            type: 'post',
+            url: 'http://114.67.97.70:6756/api/answer/list',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+                if(res.status == 1){
+                    datalist = res.data;
+                    item(datalist,$('#list'));
+
+                }
+            }
+        })
+    })
+
+    $(document).on('click','#list ul li',function () {
+        $("#list input").attr('disabled',false);
+        $(this).find('input').attr('checked',true).parent().siblings().find('input').attr('checked',false);
+        $(this).addClass('color-blue').siblings().removeClass('color-blue');
+
+    });
+    function tijiao() {
+        var area = $("#area").val();
+        var office = $("#office").val();
+        var community = $("#community").val();
+        var addr = $("#addr").val();
+        var name = $("#name").val();
+        var mobile = $("#mobile").val();
+        if(area == '' || office == '' || community =='' || addr == '' || name == '' || mobile == ''){
+            // alert('请填写完整信息');
+            // return;
+        }
+        for (let i=0; i<datalist.length; i++){
+            let list = $("#list ul").eq(i).find('input');
+            for (let j=0; j<list.length; j++){
+                if(list[j].checked){
+                    datalist[i].content.subject[j].check = 1;
+                }
+            }
+        }
+        var data = {};
+        data.pid = 1111111;
+        data.area = area;
+        data.office = office;
+        data.community = community;
+        data.addr = addr;
+        data.name = name;
+        data.mobile = mobile;
+        data.data = JSON.stringify(datalist);
+        console.log(data)
+        $.ajax({
+            url: 'http://114.67.97.70:6756/api/answer',
+            data: data,
+            type: 'post',
+            dataType: 'json',
+            success: function (res) {
+                console.log(res)
+            }
+        })
+    }
+
+
+    function item(data,parent) {
+        let item = '';
+        for (let i=0; i<data.length; i++){
+            item += '<div><h3>'+data[i].content.title+'</h3><ul>';
+            
+            for (let j=0; j<data[i].content.subject.length; j++){
+                item += '<li><input type="radio">'+data[i].content.subject[j].content+'</li>';
+            }
+            item += '</ul></div>';
+        }
+        parent.html(item);
+    }
+
+
+</script>
+</body>
+</html>

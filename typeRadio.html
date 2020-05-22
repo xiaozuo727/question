@@ -78,13 +78,24 @@
         var title = $("#title").val();
         var arr = [];
         var a = {
-            content: '这是标题',
+            content: '满意',
             check: 0,
             count: 0,
         };
         arr.push(a);
-
-        datab.pid = 121212;
+        var b = {
+            content: '不满意',
+            check: 0,
+            count: 0,
+        };
+        arr.push(b);
+        var c = {
+            content: '很满意',
+            check: 0,
+            count: 0,
+        };
+        arr.push(c);
+        datab.pid = localStorage.pid;
         data.title = title;
         data.type = 1;
         data.subject = arr;
