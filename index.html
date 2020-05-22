@@ -45,10 +45,10 @@
         <div>
             <p class="color-gray font2 pad-2 border-b-gray">大学生消费情况调查问卷(ID:77878115)</p>
             <ul class="flex flex-r-w flex-x-s pad-t-4 font25">
-                <a href="'questEdit.html?id='+id" class="col-25 mar-b-4">
+                <li onclick="editFun()" class="col-25 mar-b-4">
                     <i class="iconfont bg-white font5 pad-2 border-radius-1">&#xe60c</i>
                     <p class="pad-t-2">编辑</p>
-                </a>
+                </li>
                 <li class="col-25 mar-b-4">
                     <i class="iconfont bg-white font5 pad-2 border-radius-1">&#xe737</i>
                     <p class="pad-t-2">发布</p>
@@ -99,18 +99,23 @@
         </li>
     </ul>
 <script>
-    var id;
+    var pid;
     function isUserinfo(e) {
         e.css('display') == 'block' ? e.hide() : e.show();
     }
     function showMask(id) {
         $(".mask").show();
         $(".mask-bot").show();
-        id = id;
+        pid = id;
+
     }
     function closeMask() {
         $(".mask").hide();
         $(".mask-bot").hide();
+    }
+
+    function editFun() {
+        location.href = 'questEdit.html?id='+pid;
     }
 
     function loadlist() {
