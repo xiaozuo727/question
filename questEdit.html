@@ -143,6 +143,7 @@
 
 </div>
 <script>
+    var pid = location.search.substr(1).split('=')[1];
     var datalist;
     var typelist = [{icon: '&#xe71f', text: '单选题', type:1},{icon: '&#xe692', text: '多选题', type:2}];
     function loadType(typelist,parent) {
@@ -160,7 +161,7 @@
 
     $(function () {
         var data = {
-            pid: localStorage.pid
+            pid: pid
         };
         new AjaxRequest({
             url: hostUrl + 'project/index',
