@@ -1,6 +1,5 @@
 /*全局参数定义*/
-const hostUrl = "http://114.67.97.70:6756/";
-localStorage.pid = 1111111;
+const hostUrl = "http://114.67.97.70:6756/api/";
 
 // document.getElementsByTagName('html')[0].style.fontSize = document.body.clientWidth / 7.5 + 'px';
 document.getElementsByTagName('html')[0].style.fontSize = document.documentElement.clientWidth / 7.5 + 'px';

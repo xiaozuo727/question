@@ -18,7 +18,7 @@
 </header>
 <section class="bg-gray">
     <div class="bg-white mar-b-2 pad-3">
-        <p class="bold font35">大学生消费调查问卷</p>
+        <p id="title" class="bold font35"></p>
         <p class="color-gray font25 pad-t-2">添加问卷说明</p>
     </div>
     <ul id="list">
@@ -88,55 +88,11 @@
 <!--题目-->
 <div class="quest_class fix bg-gray pad-l-r-3  ">
     <p class="color-gray font2 line-h-2 pad-t-2">添加基础题型</p>
-    <ul class="questType bg-white border-radius-1 pad-1 center color-gray font25 flex flex-r-w">
-        <a href="typeRadio.html">
-            <i >&#xe71f</i>
-            <p class="pad-t-1">单选题</p>
-        </a>
-        <li >
-            <i >&#xe692</i>
-            <p class="pad-t-1">多选题</p>
-        </li>
-        <li >
-            <i >&#xe717</i>
-            <p class="pad-t-1">填空题</p>
-        </li>
-        <li >
-            <i >&#xe67c</i>
-            <p class="pad-t-1">排序题</p>
-        </li>
-        <li >
-            <i >&#xe60d</i>
-            <p class="pad-t-1">图片上传</p>
-        </li>
-        <li >
+    <ul id="typelist" class="questType bg-white border-radius-1 pad-1 center color-gray font25 flex flex-r-w">
+        <!--<li >
             <i >&#xe647</i>
             <p class="pad-t-1">滑动条</p>
-        </li>
-        <li >
-            <i >&#xe71f</i>
-            <p class="pad-t-1">单选题</p>
-        </li>
-        <li >
-            <i >&#xe692</i>
-            <p class="pad-t-1">多选题</p>
-        </li>
-        <li >
-            <i >&#xe717</i>
-            <p class="pad-t-1">填空题</p>
-        </li>
-        <li >
-            <i >&#xe67c</i>
-            <p class="pad-t-1">排序题</p>
-        </li>
-        <li >
-            <i >&#xe60d</i>
-            <p class="pad-t-1">图片上传</p>
-        </li>
-        <li >
-            <i >&#xe647</i>
-            <p class="pad-t-1">滑动条</p>
-        </li>
+        </li>-->
     </ul>
 
     <p class="color-gray font2 line-h-2 pad-t-2">添加题目模板</p>
@@ -188,22 +144,37 @@
 </div>
 <script>
     var datalist;
+    var typelist = [{icon: '&#xe71f', text: '单选题', type:1},{icon: '&#xe692', text: '多选题', type:2}];
+    function loadType(typelist,parent) {
+        let list = '';
+        for (let i=0; i<typelist.length; i++){
+            list += '<a href="typeRadio.html?type='+typelist[i].type+'" ><i >'+typelist[i].icon+'</i><p class="pad-t-1">'+typelist[i].text+'</p></a>';
+        }
+        parent.html(list);
+    }
+    /*function selecType(type){
+        if(type == 1){
+            location.href = 'typeRadio.html';
+        }
+    }*/
+
     $(function () {
         var data = {
             pid: localStorage.pid
-        }
+        };
         new AjaxRequest({
-            url: hostUrl + 'api/project/index',
+            url: hostUrl + 'project/index',
             data: data,
             callback: function (res) {
                 if(res.status == 1){
-                    datalist = res.data;
+                    $("#title").text(res.data.project.title);
+                    datalist = res.data.subject;
                     addlist(datalist,$("#list"));
                 }
 
             }
-
-        })
+        });
+        loadType(typelist,$("#typelist"));
     });
 
     $(document).on('click','#list >li', function () {
@@ -214,14 +185,17 @@
     
     function addlist(data,parent) {
         let list = '';
-        for (let i=0; i<data.length; i++){
-            list += '<li class="bg-white mar-b-2" ><div class="pad-3 line-h-2"><p>'+data[i].content.title+'</p><ul>';
-            for (let j=0; j<data[i].content.subject.length; j++){
-                list += '<li><input type="radio">'+data[i].content.subject[j].content+'</li>';
+        if(data){
+            for (let i=0; i<data.length; i++){
+                list += '<li class="bg-white mar-b-2" ><div class="pad-3 line-h-2"><p>'+data[i].content.title+'</p><ul>';
+                for (let j=0; j<data[i].content.subject.length; j++){
+                    list += '<li><input type="radio">'+data[i].content.subject[j].content+'</li>';
+                }
+                list += '</ul></div></li>';
             }
-            list += '</ul></div></li>';
+            parent.html(list);
         }
-        parent.html(list);
+
     }
 
     function showEdit(parent) {

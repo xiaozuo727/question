@@ -36,16 +36,33 @@
             color: #1ea0fa;
             font-weight: bold;
         }
-        input[type=radio]{
+        /*input[type=radio]{
             width: 20px;
             height: 20px;
             vertical-align: middle;
             margin-right: 10px;
+        }*/
+        #list .radio{
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+            vertical-align: middle;
+            position: relative;
+        }
+        #list ul li.active{
+            color: #1ea0fa;
+        }
+        #list ul li.active .radio{
+            box-shadow: inset 0 0 5px #fff;
+            background: #1ea0fa;
         }
         #list >div{
             padding-bottom: 20px;
         }
-        p{
+        .btn{
             background: #1ea0fa;
             color: white;
             text-align: center;
@@ -53,31 +70,41 @@
             border-radius: 5px;
             padding: 5px;
         }
-
+        #info >div{
+            display: flex;
+            align-items: center;
+        }
+        #info >div p{
+            width: 25%;
+            text-align: right;
+        }
+        #info >div input{
+            flex: 1;
+        }
     </style>
 </head>
 <body>
 <h1>2019年8月份创建全国文明城市 入户调查问卷</h1>
 
 <section>
-    <div style="padding-bottom: 20px">
+    <div id="info" style="padding-bottom: 20px">
         <div>
-            区：<input id="area" type="text">
+            <p>区：</p><input id="area" type="text">
         </div>
         <div>
-            办事处：<input id="office" type="text">
+            <p>办事处：</p><input id="office" type="text">
         </div>
         <div>
-            社区：<input id="community" type="text">
+            <p>社区：</p><input id="community" type="text">
         </div>
         <div>
-            地址：<input id="addr" type="text">
+            <p>地址：</p><input id="addr" type="text">
         </div>
         <div>
-            姓名：<input id="name" type="text">
+            <p>姓名：</p><input id="name" type="text">
         </div>
         <div>
-            手机号：<input id="mobile" type="text">
+            <p>手机号：</p><input id="mobile" type="text">
         </div>
     </div>
     <div id="list">
@@ -107,12 +134,13 @@
     </div>-->
     </div>
 
-    <p onclick="tijiao()">提交</p>
+    <p class="btn" onclick="tijiao()">提交</p>
 </section>
 <script>
+    var pid = location.search.substr(1).split('=')[1];
     var datalist, subid;
     var data = {
-        pid: 1111111,
+        pid: pid,
     }
     $(function () {
         $.ajax({
@@ -131,10 +159,15 @@
         })
     })
 
-    $(document).on('click','#list ul li, #list input',function () {
-        $("#list input").attr('disabled', false);
-        $(this).find('input').attr('checked',true).parent().siblings().find('input').attr('checked',false);
-        $(this).addClass('color-blue').siblings().removeClass('color-blue');
+    $(document).on('click','#list ul li',function () {
+        let type = $(this).parent().attr('data-type');
+        if(type == 1){
+            $(this).find('input').attr('checked',true).parent().siblings().find('input').attr('checked',false);
+            $(this).addClass('active').siblings().removeClass('active');
+        }
+        if(type == 2){
+            $(this).hasClass('active')?$(this).removeClass('active'):$(this).addClass('active');
+        }
 
     });
     function tijiao() {
@@ -145,19 +178,20 @@
         var name = $("#name").val();
         var mobile = $("#mobile").val();
         if(area == '' || office == '' || community =='' || addr == '' || name == '' || mobile == ''){
-            // alert('请填写完整信息');
-            // return;
+            alert('请填写完整信息');
+            return;
         }
         for (let i=0; i<datalist.length; i++){
-            let list = $("#list ul").eq(i).find('input');
+            let list = $("#list >div").eq(i).find('li');
             for (let j=0; j<list.length; j++){
-                if(list[j].checked){
+                if(list.eq(j).hasClass('active')){
                     datalist[i].content.subject[j].check = 1;
                 }
             }
+
         }
         var data = {};
-        data.pid = 1111111;
+        data.pid = pid;
         data.area = area;
         data.office = office;
         data.community = community;
@@ -175,34 +209,21 @@
                 console.log(res);
                 if(res.status == 1){
                     subid = res.data.subid;
-                    geturl(data.pid,subid);
+                    // location.href = 'result.html?pid='+data.pid+ '&subid='+subid;
+
                 }
             }
         })
     }
-    function geturl(pid,subid) {
-        let data ={
-            pid: pid,
-            subid: subid,
-        };
-        $.ajax({
-            url: 'http://114.67.97.70:6756/api/answer/res',
-            type: 'post',
-            data: data,
-            dataType: 'json',
-            success: function (res) {
-                console.log(res);
-            }
-        })
-    }
+
 
     function item(data,parent) {
         let item = '';
         for (let i=0; i<data.length; i++){
-            item += '<div><h3>'+data[i].content.title+'</h3><ul>';
+            item += '<div><h3>'+data[i].content.title+'</h3><ul data-type="'+data[i].content.type+'">';
             
             for (let j=0; j<data[i].content.subject.length; j++){
-                item += '<li><input type="radio">'+data[i].content.subject[j].content+'</li>';
+                item += '<li><span class="radio"></span>'+data[i].content.subject[j].content+'</li>';
             }
             item += '</ul></div>';
         }

@@ -26,18 +26,28 @@
     <div class="bg-blue center color-white border-radius-1 pad-2 font35 mar-3" onclick="create()">创建调查</div>
 </section>
 <script>
-    var data = {};
+
     function create() {
-
-        data.title = $("#title").val();
-        location.href = 'questEdit.html';
-
+        var data = {};
+        let title = $("#title").val();
+        if(title == '' ){
+            toast('请填写调查名称');
+            return;
+        }
+        data.title = title;
         new AjaxRequest({
             url: hostUrl + 'addproject',
             data: data,
             callback: function (res) {
-                console.log(res);
 
+                if(res.status == 1){
+                    localStorage.pid = res.data.pid;
+                    toast('创建成功');
+                    setTimeout(function () {
+                        location.href = 'questEdit.html';
+                    },2000)
+
+                }
             }
 
         })
