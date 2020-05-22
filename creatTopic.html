@@ -41,7 +41,6 @@
             callback: function (res) {
 
                 if(res.status == 1){
-                    localStorage.pid = res.data.pid;
                     toast('创建成功');
                     setTimeout(function () {
                         location.href = 'questEdit.html';

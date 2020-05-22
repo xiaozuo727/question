@@ -72,7 +72,9 @@
 
 
 <script>
-    var type = location.search.substr(1).split('=')[1];
+    var arr = location.search.substr(1).split('&');
+    var type = arr[0].split('=')[1];
+    var pid = arr[1].split('=')[1];
     var typeSwtich = $("#typeSwtich");
     var header = $(".header");
     var selecData =[]; /*选项li内容*/
@@ -138,7 +140,7 @@
             arr.push(item);
         }
 
-        datab.pid = localStorage.pid;
+        datab.pid = pid;
         data.title = title;
         data.type = type;
         data.subject = arr;

@@ -149,7 +149,7 @@
     function loadType(typelist,parent) {
         let list = '';
         for (let i=0; i<typelist.length; i++){
-            list += '<a href="typeRadio.html?type='+typelist[i].type+'" ><i >'+typelist[i].icon+'</i><p class="pad-t-1">'+typelist[i].text+'</p></a>';
+            list += '<a href="typeRadio.html?type='+typelist[i].type+'&pid='+pid+'" ><i >'+typelist[i].icon+'</i><p class="pad-t-1">'+typelist[i].text+'</p></a>';
         }
         parent.html(list);
     }
