@@ -110,7 +110,7 @@
     <p onclick="tijiao()">提交</p>
 </section>
 <script>
-    var datalist;
+    var datalist, subid;
     var data = {
         pid: 1111111,
     }
@@ -131,8 +131,8 @@
         })
     })
 
-    $(document).on('click','#list ul li',function () {
-        $("#list input").attr('disabled',false);
+    $(document).on('click','#list ul li, #list input',function () {
+        $("#list input").attr('disabled', false);
         $(this).find('input').attr('checked',true).parent().siblings().find('input').attr('checked',false);
         $(this).addClass('color-blue').siblings().removeClass('color-blue');
 
@@ -172,11 +172,29 @@
             type: 'post',
             dataType: 'json',
             success: function (res) {
-                console.log(res)
+                console.log(res);
+                if(res.status == 1){
+                    subid = res.data.subid;
+                    geturl(data.pid,subid);
+                }
             }
         })
     }
-
+    function geturl(pid,subid) {
+        let data ={
+            pid: pid,
+            subid: subid,
+        };
+        $.ajax({
+            url: 'http://114.67.97.70:6756/api/answer/res',
+            type: 'post',
+            data: data,
+            dataType: 'json',
+            success: function (res) {
+                console.log(res);
+            }
+        })
+    }
 
     function item(data,parent) {
         let item = '';
