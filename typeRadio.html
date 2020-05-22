@@ -12,7 +12,7 @@
 </head>
 <body>
 <header>
-    <a href="questEdit.html" class="f1 color-white iconfont">&#xe675</a>
+    <a href="javascript:history.go(-1)" class="f1 color-white iconfont">&#xe675</a>
     <div class="header f8 center"></div>
     <div class="f1"></div>
 </header>
@@ -153,7 +153,7 @@
                 if(res.status == 1){
                     toast(res.info);
                     setTimeout(function () {
-                        location.href = 'questEdit.html';
+                        history.go(-1);
                     },1000)
                 }
 
