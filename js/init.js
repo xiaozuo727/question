@@ -60,6 +60,7 @@ $(function () {
         // 发送请求
         sendRequest: function () {
             var self = this;
+            console.log(localStorage.user_id,localStorage.token)
             $.ajax({
                 type: this.type,
                 data: this.data,
@@ -67,8 +68,8 @@ $(function () {
                 url: this.url,
                 beforeSend: res => {
                     self.showLoader();
-                    // res.setRequestHeader("userid", localStorage.user_id);
-                    // res.setRequestHeader("token", localStorage.token);
+                    res.setRequestHeader("userid", localStorage.user_id);
+                    res.setRequestHeader("token", localStorage.token);
                     // console.log("userid:"+localStorage.user_id+",token:"+localStorage.token);
                     // res.setRequestHeader('X-CSRF-TOKEN',$('#token').val())
                 },

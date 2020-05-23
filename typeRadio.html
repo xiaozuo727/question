@@ -150,8 +150,8 @@
             url: hostUrl + 'addsubject',
             data: datab,
             callback: function (res) {
+                toast(res.info);
                 if(res.status == 1){
-                    toast(res.info);
                     setTimeout(function () {
                         history.go(-1);
                     },1000)

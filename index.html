@@ -99,6 +99,7 @@
         </li>
     </ul>
 <script>
+
     var pid;
     function isUserinfo(e) {
         e.css('display') == 'block' ? e.hide() : e.show();
@@ -119,11 +120,9 @@
     }
 
     function loadlist() {
-        var data = {};
-        data.uid = 0;
+
         new AjaxRequest({
             url: hostUrl + 'project/list',
-            data: data,
             callback: function (res) {
 
                 if(res.status == 1){

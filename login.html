@@ -56,15 +56,19 @@
             account: account,
             password: password,
         };
-        new AjaxRequest({
+        $.ajax({
             url: hostUrl + 'login',
             data: data,
-            callback: function (res) {
+            type: 'post',
+            dataType: 'json',
+            success: function (res) {
+                toast(res.info);
                 if(res.status == 1){
-                    toast(res);
+                    localStorage.user_id = res.data.user_id;
+                    localStorage.token = res.data.token;
                     setTimeout(function () {
-                        // location.href = 'index.html';
-                    },2000)
+                        location.href = 'index.html';
+                    },1000)
                 }
             }
         })
