@@ -20,11 +20,11 @@
         <ul class="pad-t-4 pad-b-4">
             <li class="flex pad-2 border-b-gray">
                 <i class="font5">&#xe615</i>
-                <input class="f1 pad-l-2" type="text" placeholder="手机号/邮箱/用户名">
+                <input id="account" class="f1 pad-l-2" type="text" placeholder="手机号/邮箱/用户名">
             </li>
             <li class="flex pad-2 border-b-gray">
                 <i class="font5">&#xe621</i>
-                <input class="f1 pad-l-2" type="password" placeholder="密码">
+                <input id="password" class="f1 pad-l-2" type="password" placeholder="密码">
                 <span class="color-blue">忘记密码?</span>
             </li>
             <!--<li class="flex pad-2 border-b-gray">
@@ -38,11 +38,37 @@
 
     </div>
 
-    <a href="index.html" class="block border-radius-5 bg-blue pad-2 color-white center font35 mar-t-5 mar-b-5">登录</a>
+    <p class="block border-radius-5 bg-blue pad-2 color-white center font35 mar-t-5 mar-b-5" onclick="login()">登录</p>
 
     <div class="color-gray ab col-10 center l-b-0 pad-3 mar-b-3 font25">
         <p>登录即代表您同意问卷星<span class="color-blue">《用户服务协议》</span>和<span class="color-blue">《隐私条款》</span></p>
     </div>
 </div>
+<script>
+    function login() {
+        let account = $("#account").val();
+        let password = $("#password").val();
+        if(!account || !password){
+            toast('请填写完整信息');
+            return;
+        }
+        let data = {
+            account: account,
+            password: password,
+        };
+        new AjaxRequest({
+            url: hostUrl + 'login',
+            data: data,
+            callback: function (res) {
+                if(res.status == 1){
+                    toast(res);
+                    setTimeout(function () {
+                        // location.href = 'index.html';
+                    },2000)
+                }
+            }
+        })
+    }
+</script>
 </body>
 </html>
