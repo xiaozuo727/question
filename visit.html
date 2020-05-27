@@ -81,6 +81,28 @@
         #info >div input{
             flex: 1;
         }
+        .center{
+            text-align: center;
+        }
+        .mask{position: fixed;left: 0;top:0;bottom:0;right:0;background:rgba(0,0,0,.3);animation: mask .5s;display:none;z-index: 9;}
+        .mask-box{position: fixed;top:50%;left:50%;transform: translate(-50%,-50%);background:white;animation: maskbox .2s;display:none;width: 80%;z-index: 11;}
+        .mask-box >p{line-height: 3}
+        .mask-box >div{
+            border-top: 1px solid #eee;
+            padding: 20px 0 0;
+        }
+        .mask-box >div >span{
+            background: #1ea0fa;
+            display: inline-block;
+            color: white;
+            padding: 5px 20px;
+            border-radius: 5px;
+            margin: 20px;
+        }
+        .mask-box >div >span:first-child{
+            background: #eee;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -136,8 +158,20 @@
 
     <p class="btn" onclick="tijiao()">提交</p>
 </section>
+
+<!--dialog-->
+<div class="mask">
+    <div class="mask-box center">
+        <p>确定要提交问卷吗?</p>
+        <div >
+            <span class="cancel">取消</span>
+            <span class="yes">确定</span>
+        </div>
+    </div>
+</div>
 <script>
     var pid = location.search.substr(1).split('=')[1];
+    var publish;
     var datalist, subid;
     var data = {
         pid: pid,
@@ -151,7 +185,8 @@
             success: function (res) {
                 console.log(res);
                 if(res.status == 1){
-                    datalist = res.data;
+                    datalist = res.data.subject;
+                    publish = res.data.publish;
                     item(datalist,$('#list'));
 
                 }
@@ -170,7 +205,21 @@
         }
 
     });
-    function tijiao() {
+    function tijiao(){
+        $(".mask").show();
+        $(".mask-box").show();
+    }
+    $(".cancel").click(function () {
+        $(".mask").hide();
+        $(".mask-box").hide();
+    })
+    $(document).on('click','.yes', function (){
+        $(".mask").hide();
+        $(".mask-box").hide();
+        if(publish == 0){
+            alert('此问卷不存在');
+            return;
+        }
         var area = $("#area").val();
         var office = $("#office").val();
         var community = $("#community").val();
@@ -214,13 +263,13 @@
                 }
             }
         })
-    }
+    })
 
 
     function item(data,parent) {
         let item = '';
         for (let i=0; i<data.length; i++){
-            item += '<div><h3>'+data[i].content.title+'</h3><ul data-type="'+data[i].content.type+'">';
+            item += '<div><h3>'+(i+1)+data[i].content.title+'</h3><ul data-type="'+data[i].content.type+'">';
             
             for (let j=0; j<data[i].content.subject.length; j++){
                 item += '<li><span class="radio"></span>'+data[i].content.subject[j].content+'</li>';

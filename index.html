@@ -49,15 +49,15 @@
                     <i class="iconfont bg-white font5 pad-2 border-radius-1">&#xe60c</i>
                     <p class="pad-t-2">编辑</p>
                 </li>
-                <li class="col-25 mar-b-4">
+                <li onclick="publish()" class="col-25 mar-b-4">
                     <i class="iconfont bg-white font5 pad-2 border-radius-1">&#xe737</i>
                     <p class="pad-t-2">发布</p>
                 </li>
-                <li class="col-25 mar-b-4">
+                <li onclick="share()" class="col-25 mar-b-4">
                     <i class="iconfont bg-white font5 pad-2 border-radius-1">&#xe684</i>
                     <p class="pad-t-2">分享</p>
                 </li>
-                <li class="col-25 mar-b-4">
+                <li onclick="preview()" class="col-25 mar-b-4">
                     <i class="iconfont bg-white font5 pad-2 border-radius-1">&#xe856</i>
                     <p class="pad-t-2">结果</p>
                 </li>
@@ -100,23 +100,72 @@
     </ul>
 <script>
 
-    var pid;
+    var pid, ispublish;
     function isUserinfo(e) {
         e.css('display') == 'block' ? e.hide() : e.show();
     }
-    function showMask(id) {
+    function showMask(id,isfabu) {
         $(".mask").show();
         $(".mask-bot").show();
         pid = id;
-
+        ispublish = isfabu;
     }
     function closeMask() {
         $(".mask").hide();
         $(".mask-bot").hide();
     }
-
+    
     function editFun() {
         location.href = 'questEdit.html?id='+pid;
+    }
+    // 发布
+    function publish() {
+        let data = {
+            pid: pid
+        };
+        new AjaxRequest({
+            url: hostUrl + 'publish',
+            data: data,
+            callback: function (res) {
+                close();
+
+                if(res.status == 1){
+
+                    dialog('发布成功，是否立即分享?');
+
+                }else{
+                    toast(res.info);
+                }
+            }
+
+        })
+    }
+    $(document).on('click', '.dia_cancel', function () {
+        $(".mask").hide();
+        $(".mask-box").hide();
+    });
+    $(document).on('click', '.dia_confirm', function () {
+        $(".mask").hide();
+        $(".mask-box").hide();
+        location.href = 'share.html?pid='+pid;
+    });
+
+    function share() {
+        $(".mask").hide();
+        $(".mask-bot").hide();
+        location.href = 'share.html?pid='+pid;
+    }
+    
+    function preview() {
+        close();
+        if(ispublish ==0){  //未发布
+
+            toast('此问卷还没有发布');
+        }
+        if(ispublish ==1){  //已发布
+            location.href = 'preview.html?pid='+pid;
+        }
+
     }
 
     function loadlist() {
@@ -137,7 +186,7 @@
     function loadItem(data,parent) {
         let list = '';
         for (let i=0; i<data.length; i++){
-            list += '<li class="bg-white pad-3 border-radius-1 mar-b-1 flex" onclick="showMask('+data[i].id+')" ><div class="f1 border-r-gray"><p class="ellipsis">'+(data[i].title?data[i].title:'标题')+'</p><span class="font25 color-gray">'+(data[i].publish==0?'未发布':data[i].publish==1?'已发布':'')+'</span></div><div class="center pad-l-2"><b class="color-blue">'+(data[i].counts?data[i].counts:0)+'</b><p class="color-gray font25">问卷数量</p></div></li>';
+            list += '<li class="bg-white pad-3 border-radius-1 mar-b-1 flex" onclick="showMask('+data[i].id+','+data[i].publish+')" ><div class="f1 border-r-gray"><p class="ellipsis">'+(data[i].title?data[i].title:'标题')+'</p><span class="font25 color-gray">'+(data[i].publish==0?'未发布':data[i].publish==1?'已发布':'')+'</span></div><div class="center pad-l-2"><b class="color-blue">'+(data[i].counts?data[i].counts:0)+'</b><p class="color-gray font25">问卷数量</p></div></li>';
         }
         parent.html(list);
     }

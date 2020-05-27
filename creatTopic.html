@@ -39,12 +39,12 @@
             url: hostUrl + 'addproject',
             data: data,
             callback: function (res) {
-
+                toast(res.info);
                 if(res.status == 1){
-                    toast('创建成功');
+                    let pid = res.data.pid;
                     setTimeout(function () {
-                        location.href = 'questEdit.html';
-                    },2000)
+                        location.href = 'questEdit.html?pid='+pid;
+                    },1000)
 
                 }
             }

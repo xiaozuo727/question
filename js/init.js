@@ -12,7 +12,7 @@ $(function () {
     // JQ Alert
     var toast = '<div class="toast" ></div>';
     var loading = '<div class="loading" ></div>';
-    var dialog = '<div class="mask close" ></div><div class="mask-box dialog border-radius-1 center"><p>温馨提示</p><div class="mask-msg pad-3"></div><div class="pad-t-3 flex space-ard"><span class="bg-gray pad-2-5 border-radius-1">取消</span><span class="bg-blue color-white pad-2-5 border-radius-1">确定</span></div></div>';
+    var dialog = '<div class="mask close" ></div><div class="mask-box dialog border-radius-1 center"><p>温馨提示</p><div class="mask-msg pad-3"></div><div class="pad-t-3 flex space-ard"><span class="dia_cancel bg-gray pad-2-5 border-radius-1" >取消</span><span class="dia_confirm bg-blue color-white pad-2-5 border-radius-1">确定</span></div></div>';
     $("body").append(toast, loading, dialog);
 
     // 判断login
@@ -60,7 +60,6 @@ $(function () {
         // 发送请求
         sendRequest: function () {
             var self = this;
-            console.log(localStorage.user_id,localStorage.token)
             $.ajax({
                 type: this.type,
                 data: this.data,
@@ -121,7 +120,7 @@ function dialog(txt) {
 
     $(".mask-box").show();
 }
-// JQ close dialog
+// JQ dialog clickMask
 function close() {
     $(".mask").hide();
     $(".mask-box").hide();
@@ -176,7 +175,7 @@ function parseUrlParams() {
 
 // CopyText -- click event
 function getcopy(copyid){
-    var txt = document.getElementById(copyid).innerText;
+    var txt = document.getElementById(copyid).value;
     var oinput = document.createElement('input');
     oinput.value = txt;
     document.body.appendChild(oinput);

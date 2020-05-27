@@ -9,6 +9,7 @@
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/init.js"></script>
     <title>Document</title>
+
 </head>
 <body>
 <header>
@@ -143,7 +144,7 @@
 
 </div>
 <script>
-    var pid = location.search.substr(1).split('=')[1];
+    var itemid, pid = location.search.substr(1).split('=')[1];
     var datalist;
     var typelist = [{icon: '&#xe71f', text: '单选题', type:1},{icon: '&#xe692', text: '多选题', type:2}];
     function loadType(typelist,parent) {
@@ -153,11 +154,6 @@
         }
         parent.html(list);
     }
-    /*function selecType(type){
-        if(type == 1){
-            location.href = 'typeRadio.html';
-        }
-    }*/
 
     $(function () {
         var data = {
@@ -171,16 +167,19 @@
                     $("#title").text(res.data.project.title);
                     datalist = res.data.subject;
                     addlist(datalist,$("#list"));
+                    $("#list input").attr('disabled','disabled');
                 }
 
             }
         });
         loadType(typelist,$("#typelist"));
+
     });
 
     $(document).on('click','#list >li', function () {
         $("#list >li").children("#editbox").remove();
         showEdit($(this));
+        itemid = $(this).attr('data-id');
 
     });
     
@@ -188,9 +187,9 @@
         let list = '';
         if(data){
             for (let i=0; i<data.length; i++){
-                list += '<li class="bg-white mar-b-2" ><div class="pad-3 line-h-2"><p>'+data[i].content.title+'</p><ul>';
+                list += '<li class="bg-white mar-b-2" data-id="'+data[i].id+'"><div class="pad-3 line-h-2"><p>'+(i+1)+data[i].content.title+'</p><ul>';
                 for (let j=0; j<data[i].content.subject.length; j++){
-                    list += '<li><input type="radio">'+data[i].content.subject[j].content+'</li>';
+                    list += '<li><input type="radio" >'+data[i].content.subject[j].content+'</li>';
                 }
                 list += '</ul></div></li>';
             }
@@ -200,11 +199,13 @@
     }
 
     function showEdit(parent) {
-        let content = '<ul id="editbox" class="bg-gray-l color-gray center font2 pad-2 border-t-gray hidden"><li class="fl col-2"><i class="iconfont font4 ">&#xe639</i><p class="pad-t-1">编辑</p></li><li class="fl col-2"><i class="iconfont font4">&#xe66e</i><p class="pad-t-1">复制</p></li><li class="fl col-2"><i class="iconfont font4">&#xe633</i><p class="pad-t-1">上移</p></li><li class="fl col-2"><i class="iconfont font4">&#xe631</i><p class="pad-t-1">下移</p></li><li class="fl col-2"><i class="iconfont font4">&#xe667</i><p class="pad-t-1">删除</p></li></ul>';
+        let content = '<ul id="editbox" class="bg-gray-l color-gray center font2 pad-2 border-t-gray hidden"><li class="fl col-2" onclick="editFun(itemid)"><i class="iconfont font4 ">&#xe639</i><p class="pad-t-1">编辑</p></li><li class="fl col-2"><i class="iconfont font4">&#xe66e</i><p class="pad-t-1">复制</p></li><li class="fl col-2"><i class="iconfont font4">&#xe633</i><p class="pad-t-1">上移</p></li><li class="fl col-2"><i class="iconfont font4">&#xe631</i><p class="pad-t-1">下移</p></li><li class="fl col-2"><i class="iconfont font4">&#xe667</i><p class="pad-t-1">删除</p></li></ul>';
         parent.append(content)
 
     }
-    
+    function editFun(itemid) {
+        
+    }
 
     function quest_class_select() {
         $(".quest_class").animate({top: "1rem"})

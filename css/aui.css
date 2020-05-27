@@ -343,7 +343,7 @@ section{min-height: 100vh;padding-top:1rem;padding-bottom: 1.2rem;}
 }
 .fix-box{position: fixed;top:50%;left:50%;transform: translate(-50%,-50%);display:none;width: 90%;z-index: 10;} /*窗口中间 和mask-box一样，这个无动画*/
 .mask{position: fixed;left: 0;top:0;bottom:0;right:0;background:rgba(0,0,0,.3);animation: mask .5s;display:none;z-index: 9;}
-.mask-box{position: fixed;top:50%;left:50%;transform: translate(-50%,-50%);background:white;animation: maskbox .2s;display:none;width: 80%;z-index: 10;}
+.mask-box{position: fixed;top:50%;left:50%;transform: translate(-50%,-50%);background:white;animation: maskbox .2s;display:none;width: 80%;z-index: 11;}
 .mask-bot{position: fixed;width: 100%;left: 0;bottom: -100%;text-align:center;background:white;animation: maskbot .3s forwards;display:none;z-index: 10;}
 .hasmask-box{position: fixed;top:50%;left:50%;transform: translate(-50%,-50%);animation: maskbox .2s;display:none;width: 80%;z-index: 10;}
 .hasmask-box:before{content: '';position: fixed;width: 100vw;height: 100vh;background: rgba(0,0,0,.3);left: 50%;top:50%;transform: translate(-50%,-50%);z-index: -1;}

@@ -107,7 +107,7 @@
     function addlist(data,parent) {
         let list = '';
         for (let i=0; i<data.length; i++){
-            list += '<li><p>'+data[i].content.title+'</p><table><thead><th>选项</th><th>人数</th><th>比例</th></thead><tbody>';
+            list += '<li><p>'+(i+1)+data[i].content.title+'</p><table><thead><th>选项</th><th>人数</th><th>比例</th></thead><tbody>';
             for (let j=0;j<data[i].content.subject.length; j++){
                 let bv = (parseInt(data[i].content.subject[j].count) / parseInt(data[i].allcount) * 100).toFixed(2);
                 list += '<tr><td>'+data[i].content.subject[j].content+'</td><td>'+data[i].content.subject[j].count+'</td><td>'+bv+'%</td></tr>';
